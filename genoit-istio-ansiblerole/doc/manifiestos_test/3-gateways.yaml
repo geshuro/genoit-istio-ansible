@@ -1,0 +1,17 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: mygateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 443
+      name: https-helloworld
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE
+      credentialName: genoit-credential
+    hosts:
+    - helloworld-v1.micro-ingress.genoit.int
