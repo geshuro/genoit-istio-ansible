@@ -1,0 +1,9 @@
+---
+- hosts: localhost
+  vars:
+    instalar_enabled: true
+  vars_files:
+    - vars/main.yaml
+  roles:
+    - role: istio
+      when: "{{ instalar_enabled }}"

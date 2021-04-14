@@ -1,0 +1,4 @@
+---
+- name: Istio was deployed
+  debug:
+    msg: Istio was deployed at {{ namespace }}

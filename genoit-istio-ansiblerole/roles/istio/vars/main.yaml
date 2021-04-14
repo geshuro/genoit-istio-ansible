@@ -1,0 +1,440 @@
+---
+namespace: istio-system
+nombre_secreto_tls: sunat-cuc-credential
+state: present
+tls_cert_path: "{{ playbook_dir }}/files/ca-cert.pem"
+tls_key_path: "{{ playbook_dir }}/files/ca-key.pem"
+instalar_enabled: true
+helmchart_path: "{{ playbook_dir }}/helmchart/sunat-cuc-istio-helmchart/"
+helmchart_istio_base_path: "{{ helmchart_path }}/manifests/charts/base/"
+helmchart_istio_cni_path: "{{ helmchart_path }}/manifests/charts/istio-cni/"
+helmchart_istio_discovery_path: "{{ helmchart_path }}/manifests/charts/istio-control/istio-discovery/"
+helmchart_istio_ingress_path: "{{ helmchart_path }}/manifests/charts/gateways/istio-ingress/"
+helmchart_istio_egress_path: "{{ helmchart_path }}/manifests/charts/gateways/istio-egress/"
+output_path: /tmp/ansible_tasks
+desired_deployment_name_base: istio-base
+desired_deployment_name_cni: istio-cni
+desired_deployment_name_discovery: istio-discovery
+desired_deployment_name_ingress: istio-ingress
+desired_deployment_name_egress: istio-egress
+jwt_policy: "first-party-jwt"
+istio_cni_enabled: true
+
+
+
+#Variable helmchart - inicio
+#Istio Base - inicio
+istio_base_namespace: "{{ namespace }}"
+istio_base_istiod_imagePullSecrets: []
+istio_base_istiod_enableAnalysis: false
+istio_base_configValidation: true
+istio_base_externalIstiod: false
+istio_base_remotePilotAddress: ""
+istio_base_enableCRDTemplates: false
+istio_base_validationURL: ""
+istio_base_enableIstioConfigCRDs: true
+#Istio Base - fin
+#Istio CNI - inicio
+istio_cni_hub: ""
+istio_cni_tag: ""
+istio_cni_image: "install-cni"
+istio_cni_pullPolicy: ""
+istio_cni_logLevel: "info"
+istio_cni_cniBinDir: "/opt/cni/bin"
+istio_cni_cniConfDir: "/etc/cni/net.d"
+istio_cni_cniConfFileName: ""
+istio_cni_excludeNamespaces: |
+  - istio-system
+  - kube-system
+istio_cni_podAnnotations: {}
+#Determianr cual clusterrole
+istio_cni_psp_cluster_role: "psp:privileged"
+istio_cni_chained: true
+istio_cni_repair: |
+  enabled: true
+  hub: ""
+  tag: ""
+  labelPods: true
+  deletePods: true
+  initContainerName: "istio-validation"
+  brokenPodLabelKey: "cni.istio.io/uninitialized"
+  brokenPodLabelValue: "true"
+istio_cni_taint_enabled: false
+istio_cni_revision: ""
+istio_cni_ownerName: ""
+istio_cni_global_hub: "docker.io/istio"
+istio_cni_global_tag: 1.9.2
+istio_cni_global_imagePullPolicy: ""
+istio_cni_global_imagePullSecrets: []
+#Istio CNI - fin
+#Istio Discovery - inicio
+istio_discovery_pilot_autoscaleEnabled: true
+istio_discovery_pilot_autoscaleMin: 1
+istio_discovery_pilot_autoscaleMax: 5
+istio_discovery_pilot_replicaCount: 1
+istio_discovery_pilot_rollingMaxSurge: 100%
+istio_discovery_pilot_rollingMaxUnavailable: 25%
+istio_discovery_pilot_hub: ""
+istio_discovery_pilot_tag: ""
+istio_discovery_pilot_image: "pilot"
+istio_discovery_pilot_traceSampling: 1.0
+istio_discovery_pilot_resources: |
+  requests:
+    cpu: 500m
+    memory: 2048Mi
+istio_discovery_pilot_env: {}
+istio_discovery_pilot_cpu: |
+  targetAverageUtilization: 80
+istio_discovery_pilot_enableProtocolSniffingForOutbound: true
+istio_discovery_pilot_enableProtocolSniffingForInbound: true
+istio_discovery_pilot_nodeSelector: |
+  node-role.kubernetes.io/node-loadbalancer: "true"
+istio_discovery_pilot_podAnnotations: {}
+istio_discovery_pilot_jwksResolverExtraRootCA: ""
+istio_discovery_pilot_configSource: |
+  subscribedResources: []
+istio_discovery_pilot_plugins: []
+istio_discovery_pilot_keepaliveMaxServerConnectionAge: 30m
+istio_discovery_pilot_deploymentLabels: {}
+istio_discovery_pilot_configMap: true
+
+istio_discovery_sidecarInjectorWebhook_useLegacySelectors: true
+istio_discovery_sidecarInjectorWebhook_neverInjectSelector: []
+istio_discovery_sidecarInjectorWebhook_alwaysInjectSelector: []
+istio_discovery_sidecarInjectorWebhook_injectedAnnotations: {}
+istio_discovery_sidecarInjectorWebhook_enableNamespacesByDefault: false
+istio_discovery_sidecarInjectorWebhook_objectSelector: |
+  enabled: true
+  autoInject: true
+istio_discovery_sidecarInjectorWebhook_rewriteAppHTTPProbe: true
+istio_discovery_sidecarInjectorWebhook_templates: {}
+istio_discovery_sidecarInjectorWebhook_defaultTemplates: []
+
+istio_discovery_istiodRemote_injectionURL: ""
+
+istio_discovery_telemetry_enabled: true
+istio_discovery_telemetry_v2_enabled: true
+istio_discovery_telemetry_v2_metadataExchange: |
+  wasmEnabled: false
+istio_discovery_telemetry_v2_prometheus: |
+  enabled: true
+  wasmEnabled: false
+  configOverride:
+    gateway: {}
+    inboundSidecar: {}
+    outboundSidecar: {}
+istio_discovery_telemetry_v2_stackdriver: |
+  enabled: false
+  logging: false
+  monitoring: false
+  topology: false
+  disableOutbound: false
+  configOverride: {}
+istio_discovery_telemetry_v2_accessLogPolicy: |
+  enabled: false
+  logWindowDuration: "43200s"
+
+istio_discovery_revision: ""
+istio_discovery_ownerName: ""
+
+istio_discovery_meshConfig_enablePrometheusMerge: true
+istio_discovery_meshConfig_rootNamespace:
+
+istio_discovery_global_defaultPodDisruptionBudget: |
+  enabled: true
+istio_discovery_global_defaultResources: |
+  requests:
+    cpu: 10m
+istio_discovery_global_hub: "docker.io/istio"
+istio_discovery_global_tag: 1.9.2
+istio_discovery_global_imagePullPolicy: ""
+istio_discovery_global_imagePullSecrets: []
+istio_discovery_global_istiod: |
+  enableAnalysis: false
+istio_discovery_global_logAsJson: false
+istio_discovery_global_logging: |
+  level: "default:info"
+istio_discovery_global_omitSidecarInjectorConfigMap: false
+istio_discovery_global_oneNamespace: false
+istio_discovery_global_operatorManageWebhooks: false
+istio_discovery_global_priorityClassName: ""
+istio_discovery_global_proxy: |
+  image: proxyv2
+  autoInject: enabled
+  clusterDomain: "cluster.local"
+  componentLogLevel: "misc:error"
+  enableCoreDump: false
+  excludeInboundPorts: ""
+  includeIPRanges: "*"
+  excludeIPRanges: ""
+  excludeOutboundPorts: ""
+  logLevel: warning
+  privileged: false
+  readinessFailureThreshold: 30
+  readinessInitialDelaySeconds: 1
+  readinessPeriodSeconds: 2
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 2000m
+      memory: 1024Mi
+  statusPort: 15020
+  tracer: "zipkin"
+  holdApplicationUntilProxyStarts: false
+istio_discovery_global_proxy_init: |
+  image: proxyv2
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 1024Mi
+    requests:
+      cpu: 10m
+      memory: 10Mi
+istio_discovery_global_remotePilotAddress: ""
+istio_discovery_base_enableIstioConfigCRDs: true
+#Istio Discovery - fin
+###Transversal - inicio
+istio_all_global_caAddress: ""
+istio_all_global_externalIstiod: false
+istio_all_global_istioNamespace: "{{ namespace }}"
+istio_all_global_jwtPolicy: "{{ jwt_policy }}"
+istio_all_global_meshID: ""
+istio_all_global_meshNetworks: {}
+istio_all_global_mountMtlsCerts: false
+istio_all_global_multiCluster: |
+  enabled: false
+  clusterName: ""
+istio_ingress_global_multiCluster: |
+  enabled: false
+  clusterName: ""
+  globalDomainSuffix: "global"
+  includeEnvoyFilter: true
+istio_all_global_network: ""
+istio_all_global_pilotCertProvider: "istiod"
+istio_all_global_sds: |
+  token:
+    aud: istio-ca
+istio_all_global_sts: |
+  servicePort: 0
+istio_all_global_tracer: |
+  datadog:
+    address: "$(HOST_IP):8126"
+  lightstep:
+    address: ""
+    accessToken: ""
+  stackdriver:
+    debug: false
+    maxNumberOfMessageEvents: 200
+    maxNumberOfAnnotations: 200
+    maxNumberOfAttributes: 200
+  zipkin:
+    address: ""
+istio_all_global_useMCP: false
+istio_all_global_trustDomain: ""
+###Transversal - fin
+#Istio IngressGateway - inicio
+istio_gateways_istio_ingressgateway_name: "istio-ingressgateway"
+istio_gateways_istio_ingressgateway_labels: |
+  app: istio-ingressgateway
+  istio: ingressgateway
+istio_gateways_istio_ingressgateway_ports: |
+  - port: 15021
+    targetPort: 15021
+    name: status-port
+    protocol: TCP
+  - port: 80
+    targetPort: 8080
+    nodePort: 31080
+    name: http2
+    protocol: TCP
+  - port: 443
+    targetPort: 8443
+    nodePort: 31443
+    name: https
+    protocol: TCP
+  - port: 15012
+    targetPort: 15012
+    name: tcp-istiod
+    protocol: TCP
+  - port: 15443
+    targetPort: 15443
+    name: tls
+    protocol: TCP
+istio_gateways_istio_ingressgateway_rollingMaxSurge: 100%
+istio_gateways_istio_ingressgateway_rollingMaxUnavailable: 25%
+istio_gateways_istio_ingressgateway_autoscaleEnabled: true
+istio_gateways_istio_ingressgateway_autoscaleMin: 1
+istio_gateways_istio_ingressgateway_autoscaleMax: 5
+istio_gateways_istio_ingressgateway_cpu: |
+  targetAverageUtilization: 80
+istio_gateways_istio_ingressgateway_resources: |
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 2000m
+    memory: 1024Mi
+istio_gateways_istio_ingressgateway_loadBalancerIP: ""
+istio_gateways_istio_ingressgateway_loadBalancerSourceRanges: []
+istio_gateways_istio_ingressgateway_serviceAnnotations: {}
+istio_gateways_istio_ingressgateway_zvpn: |
+  enabled: false
+  suffix: global
+istio_gateways_istio_ingressgateway_podAnnotations: {}
+istio_gateways_istio_ingressgateway_type: "NodePort"
+istio_gateways_istio_ingressgateway_secretVolumes: |
+  - name: ingressgateway-certs
+    secretName: istio-ingressgateway-certs
+    mountPath: /etc/istio/ingressgateway-certs
+  - name: ingressgateway-ca-certs
+    secretName: istio-ingressgateway-ca-certs
+    mountPath: /etc/istio/ingressgateway-ca-certs
+istio_gateways_istio_ingressgateway_customService: false
+istio_gateways_istio_ingressgateway_externalTrafficPolicy: ""
+istio_gateways_istio_ingressgateway_ingressPorts: []
+istio_gateways_istio_ingressgateway_additionalContainers: []
+istio_gateways_istio_ingressgateway_configVolumes: []
+istio_gateways_istio_ingressgateway_env: |
+  ISTIO_META_ROUTER_MODE: "standard"
+istio_gateways_istio_ingressgateway_nodeSelector: "{{ istio_gateways_ingressgateway_global_defaultNodeSelector }}"
+istio_gateways_istio_ingressgateway_tolerations: []
+istio_gateways_istio_ingressgateway_podAntiAffinityLabelSelector: []
+istio_gateways_istio_ingressgateway_podAntiAffinityTermLabelSelector: []
+istio_gateways_istio_ingressgateway_runAsRoot: false
+istio_gateways_istio_ingressgateway_injectionTemplate: ""
+
+istio_gateways_ingressgateway_revision: ""
+istio_gateways_ingressgateway_ownerName: ""
+
+istio_gateways_ingressgateway_global_defaultConfigVisibilitySettings: []
+istio_gateways_ingressgateway_global_defaultNodeSelector: |
+  node-role.kubernetes.io/node-loadbalancer: "true"
+istio_gateways_ingressgateway_global_defaultPodDisruptionBudget: |
+  enabled: true
+istio_gateways_ingressgateway_global_defaultResources: |
+  requests:
+    cpu: 10m
+istio_gateways_ingressgateway_global_defaultTolerations: []
+istio_gateways_ingressgateway_global_hub: "docker.io/istio"
+istio_gateways_ingressgateway_global_tag: 1.9.2
+istio_gateways_ingressgateway_global_imagePullPolicy: ""
+istio_gateways_ingressgateway_global_imagePullSecrets: []
+istio_gateways_ingressgateway_global_logAsJson: false
+istio_gateways_ingressgateway_global_arch: |
+  amd64: 2
+  s390x: 2
+  ppc64le: 2
+istio_gateways_ingressgateway_global_logging: |
+  level: "default:info"
+istio_gateways_ingressgateway_global_priorityClassName: ""
+istio_gateways_ingressgateway_global_proxy: |
+  image: proxyv2
+  clusterDomain: "cluster.local"
+  componentLogLevel: "misc:error"
+  enableCoreDump: false
+  logLevel: warning
+istio_gateways_ingressgateway_meshConfig_enablePrometheusMerge: true
+istio_gateways_ingressgateway_meshConfig_defaultConfig: |
+  proxyMetadata: {}
+  tracing: {}
+#Istio IngressGateway - fin
+#Istio EgressGateway - inicio
+istio_gateways_istio_egressgateway_name: "istio-egressgateway"
+istio_gateways_istio_egressgateway_labels: |
+  app: istio-egressgateway
+  istio: egressgateway
+istio_gateways_istio_egressgateway_ports: |
+  - port: 80
+    targetPort: 8080
+    nodePort: 32080
+    name: http2
+    protocol: TCP
+  - port: 443
+    name: https
+    targetPort: 8443
+    nodePort: 32443
+    protocol: TCP
+  - port: 15443
+    targetPort: 15443
+    name: tls
+    protocol: TCP
+istio_gateways_istio_egressgateway_rollingMaxSurge: 100%
+istio_gateways_istio_egressgateway_rollingMaxUnavailable: 25%
+istio_gateways_istio_egressgateway_autoscaleEnabled: true
+istio_gateways_istio_egressgateway_autoscaleMin: 1
+istio_gateways_istio_egressgateway_autoscaleMax: 5
+istio_gateways_istio_egressgateway_cpu: |
+  targetAverageUtilization: 80
+istio_gateways_istio_egressgateway_resources: |
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 2000m
+    memory: 1024Mi
+istio_gateways_istio_egressgateway_loadBalancerIP: ""
+istio_gateways_istio_egressgateway_loadBalancerSourceRanges: []
+istio_gateways_istio_egressgateway_serviceAnnotations: {}
+istio_gateways_istio_egressgateway_zvpn: |
+  enabled: false
+  suffix: global
+istio_gateways_istio_egressgateway_podAnnotations: {}
+istio_gateways_istio_egressgateway_type: "NodePort"
+istio_gateways_istio_egressgateway_secretVolumes: |
+  - name: egressgateway-certs
+    secretName: istio-egressgateway-certs
+    mountPath: /etc/istio/egressgateway-certs
+  - name: egressgateway-ca-certs
+    secretName: istio-egressgateway-ca-certs
+    mountPath: /etc/istio/egressgateway-ca-certs
+istio_gateways_istio_egressgateway_customService: false
+istio_gateways_istio_egressgateway_externalTrafficPolicy: ""
+istio_gateways_istio_egressgateway_egressPorts: []
+istio_gateways_istio_egressgateway_additionalContainers: []
+istio_gateways_istio_egressgateway_configVolumes: []
+istio_gateways_istio_egressgateway_env: |
+  ISTIO_META_ROUTER_MODE: "standard"
+istio_gateways_istio_egressgateway_nodeSelector: "{{ istio_gateways_egressgateway_global_defaultNodeSelector }}"
+istio_gateways_istio_egressgateway_tolerations: []
+istio_gateways_istio_egressgateway_podAntiAffinityLabelSelector: []
+istio_gateways_istio_egressgateway_podAntiAffinityTermLabelSelector: []
+istio_gateways_istio_egressgateway_runAsRoot: false
+istio_gateways_istio_egressgateway_injectionTemplate: ""
+
+istio_gateways_egressgateway_revision: ""
+istio_gateways_egressgateway_ownerName: ""
+
+istio_gateways_egressgateway_global_defaultConfigVisibilitySettings: []
+istio_gateways_egressgateway_global_defaultNodeSelector: |
+  node-role.kubernetes.io/node-loadbalancer: "true"
+istio_gateways_egressgateway_global_defaultPodDisruptionBudget: |
+  enabled: true
+istio_gateways_egressgateway_global_defaultResources: |
+  requests:
+    cpu: 10m
+istio_gateways_egressgateway_global_defaultTolerations: []
+istio_gateways_egressgateway_global_hub: "docker.io/istio"
+istio_gateways_egressgateway_global_tag: 1.9.2
+istio_gateways_egressgateway_global_imagePullPolicy: ""
+istio_gateways_egressgateway_global_imagePullSecrets: []
+istio_gateways_egressgateway_global_logAsJson: false
+istio_gateways_egressgateway_global_arch: |
+  amd64: 2
+  s390x: 2
+  ppc64le: 2
+istio_gateways_egressgateway_global_logging: |
+  level: "default:info"
+istio_gateways_egressgateway_global_priorityClassName: ""
+istio_gateways_egressgateway_global_proxy: |
+  image: proxyv2
+  clusterDomain: "cluster.local"
+  componentLogLevel: "misc:error"
+  enableCoreDump: false
+  logLevel: warning
+istio_gateways_egressgateway_meshConfig_enablePrometheusMerge: true
+istio_gateways_egressgateway_meshConfig_defaultConfig: |
+  proxyMetadata: {}
+  tracing: {}
+#Istio EgressGateway - fin

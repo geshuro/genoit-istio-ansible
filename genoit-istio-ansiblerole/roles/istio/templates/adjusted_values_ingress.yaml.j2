@@ -1,0 +1,162 @@
+gateways:
+  istio-ingressgateway:
+    name: {{ istio_gateways_istio_ingressgateway_name }}
+{% if istio_gateways_istio_ingressgateway_labels is defined and istio_gateways_istio_ingressgateway_labels|length %}
+    labels:
+{{ istio_gateways_istio_ingressgateway_labels|indent(6, True) }}
+{% endif %}
+{% if istio_gateways_istio_ingressgateway_ports is defined and istio_gateways_istio_ingressgateway_ports|length %}
+    ports:
+{{ istio_gateways_istio_ingressgateway_ports|indent(6, True) }}
+{% endif %}
+    rollingMaxSurge: {{ istio_gateways_istio_ingressgateway_rollingMaxSurge }}
+    rollingMaxUnavailable: {{ istio_gateways_istio_ingressgateway_rollingMaxUnavailable }}
+    autoscaleEnabled: {{ istio_gateways_istio_ingressgateway_autoscaleEnabled }}
+    autoscaleMin: {{ istio_gateways_istio_ingressgateway_autoscaleMin }}
+    autoscaleMax: {{ istio_gateways_istio_ingressgateway_autoscaleMax }}
+{% if istio_gateways_istio_ingressgateway_cpu is defined and istio_gateways_istio_ingressgateway_cpu|length %}
+    cpu:
+{{ istio_gateways_istio_ingressgateway_cpu|indent(6, True) }}
+{% endif %}
+{% if istio_gateways_istio_ingressgateway_resources is defined and istio_gateways_istio_ingressgateway_resources|length %}
+    resources:
+{{ istio_gateways_istio_ingressgateway_resources|indent(6, True) }}
+{% endif %}
+    loadBalancerIP: "{{ istio_gateways_istio_ingressgateway_loadBalancerIP }}"
+{% if istio_gateways_istio_ingressgateway_loadBalancerSourceRanges is defined and istio_gateways_istio_ingressgateway_loadBalancerSourceRanges|length %}
+    loadBalancerSourceRanges:
+{{ istio_gateways_istio_ingressgateway_loadBalancerSourceRanges|indent(6, True) }}
+{% endif %}
+{% if istio_gateways_istio_ingressgateway_serviceAnnotations is defined and istio_gateways_istio_ingressgateway_serviceAnnotations|length %}
+    serviceAnnotations:
+{{ istio_gateways_istio_ingressgateway_serviceAnnotations|indent(6, True) }}
+{% endif %}
+{% if istio_gateways_istio_ingressgateway_zvpn is defined and istio_gateways_istio_ingressgateway_zvpn|length %}
+    zvpn:
+{{ istio_gateways_istio_ingressgateway_zvpn|indent(6, True) }}
+{% endif %}
+{% if istio_gateways_istio_ingressgateway_podAnnotations is defined and istio_gateways_istio_ingressgateway_podAnnotations|length %}
+    podAnnotations:
+{{ istio_gateways_istio_ingressgateway_podAnnotations|indent(6, True) }}
+{% endif %}
+    type: {{ istio_gateways_istio_ingressgateway_type }}
+{% if istio_gateways_istio_ingressgateway_secretVolumes is defined and istio_gateways_istio_ingressgateway_secretVolumes|length %}
+    secretVolumes:
+{{ istio_gateways_istio_ingressgateway_secretVolumes|indent(6, True) }}
+{% endif %}
+    customService: {{ istio_gateways_istio_ingressgateway_customService }}
+    externalTrafficPolicy: "{{ istio_gateways_istio_ingressgateway_externalTrafficPolicy }}"
+{% if istio_gateways_istio_ingressgateway_ingressPorts is defined and istio_gateways_istio_ingressgateway_ingressPorts|length %}
+    ingressPorts:
+{{ istio_gateways_istio_ingressgateway_ingressPorts|indent(6, True) }}
+{% endif %}
+{% if istio_gateways_istio_ingressgateway_additionalContainers is defined and istio_gateways_istio_ingressgateway_additionalContainers|length %}
+    additionalContainers:
+{{ istio_gateways_istio_ingressgateway_additionalContainers|indent(6, True) }}
+{% endif %}
+{% if istio_gateways_istio_ingressgateway_configVolumes is defined and istio_gateways_istio_ingressgateway_configVolumes|length %}
+    configVolumes:
+{{ istio_gateways_istio_ingressgateway_configVolumes|indent(6, True) }}
+{% endif %}
+{% if istio_gateways_istio_ingressgateway_env is defined and istio_gateways_istio_ingressgateway_env|length %}
+    env:
+{{ istio_gateways_istio_ingressgateway_env|indent(6, True) }}
+{% endif %}
+{% if istio_gateways_istio_ingressgateway_nodeSelector is defined and istio_gateways_istio_ingressgateway_nodeSelector|length %}
+    nodeSelector:
+{{ istio_gateways_istio_ingressgateway_nodeSelector|indent(6, True) }}
+{% endif %}
+{% if istio_gateways_istio_ingressgateway_tolerations is defined and istio_gateways_istio_ingressgateway_tolerations|length %}
+    tolerations:
+{{ istio_gateways_istio_ingressgateway_tolerations|indent(6, True) }}
+{% endif %}
+{% if istio_gateways_istio_ingressgateway_podAntiAffinityLabelSelector is defined and istio_gateways_istio_ingressgateway_podAntiAffinityLabelSelector|length %}
+    podAntiAffinityLabelSelector:
+{{ istio_gateways_istio_ingressgateway_podAntiAffinityLabelSelector|indent(6, True) }}
+{% endif %}
+{% if istio_gateways_istio_ingressgateway_podAntiAffinityTermLabelSelector is defined and istio_gateways_istio_ingressgateway_podAntiAffinityTermLabelSelector|length %}
+    podAntiAffinityTermLabelSelector:
+{{ istio_gateways_istio_ingressgateway_podAntiAffinityTermLabelSelector|indent(6, True) }}
+{% endif %}
+    runAsRoot: {{ istio_gateways_istio_ingressgateway_runAsRoot }}
+    injectionTemplate: "{{ istio_gateways_istio_ingressgateway_injectionTemplate }}"
+
+revision: "{{ istio_gateways_ingressgateway_revision }}"
+
+ownerName: "{{ istio_gateways_ingressgateway_ownerName }}"
+
+global:
+{% if istio_gateways_ingressgateway_global_defaultConfigVisibilitySettings is defined and istio_gateways_ingressgateway_global_defaultConfigVisibilitySettings|length %}
+  defaultConfigVisibilitySettings:
+{{ istio_gateways_ingressgateway_global_defaultConfigVisibilitySettings|indent(4, True) }}
+{% endif %}
+{% if istio_gateways_ingressgateway_global_defaultNodeSelector is defined and istio_gateways_ingressgateway_global_defaultNodeSelector|length %}
+  defaultNodeSelector:
+{{ istio_gateways_ingressgateway_global_defaultNodeSelector|indent(4, True) }}
+{% endif %}
+{% if istio_gateways_ingressgateway_global_defaultPodDisruptionBudget is defined and istio_gateways_ingressgateway_global_defaultPodDisruptionBudget|length %}
+  defaultPodDisruptionBudget:
+{{ istio_gateways_ingressgateway_global_defaultPodDisruptionBudget|indent(4, True) }}
+{% endif %}
+{% if istio_gateways_ingressgateway_global_defaultResources is defined and istio_gateways_ingressgateway_global_defaultResources|length %}
+  defaultResources:
+{{ istio_gateways_ingressgateway_global_defaultResources|indent(4, True) }}
+{% endif %}
+{% if istio_gateways_ingressgateway_global_defaultTolerations is defined and istio_gateways_ingressgateway_global_defaultTolerations|length %}
+  defaultTolerations:
+{{ istio_gateways_ingressgateway_global_defaultTolerations|indent(4, True) }}
+{% endif %}
+  hub: {{ istio_gateways_ingressgateway_global_hub }}
+  tag: {{ istio_gateways_ingressgateway_global_tag }}
+  imagePullPolicy: "{{ istio_gateways_ingressgateway_global_imagePullPolicy }}"
+{% if istio_gateways_ingressgateway_global_imagePullSecrets is defined and istio_gateways_ingressgateway_global_imagePullSecrets|length %}
+  imagePullSecrets:
+{{ istio_gateways_ingressgateway_global_imagePullSecrets|indent(4, True) }}
+{% endif %}
+  logAsJson: {{ istio_gateways_ingressgateway_global_logAsJson }}
+{% if istio_gateways_ingressgateway_global_arch is defined and istio_gateways_ingressgateway_global_arch|length %}
+  arch:
+{{ istio_gateways_ingressgateway_global_arch|indent(4, True) }}
+{% endif %}
+{% if istio_gateways_ingressgateway_global_logging is defined and istio_gateways_ingressgateway_global_logging|length %}
+  logging:
+{{ istio_gateways_ingressgateway_global_logging|indent(4, True) }}
+{% endif %}
+  priorityClassName: "{{ istio_gateways_ingressgateway_global_priorityClassName }}"
+{% if istio_gateways_ingressgateway_global_proxy is defined and istio_gateways_ingressgateway_global_proxy|length %}
+  proxy:
+{{ istio_gateways_ingressgateway_global_proxy|indent(4, True) }}
+{% endif %}
+
+  ##############################################################################################
+  # The following values are found in other charts. To effectively modify these values, make   #
+  # make sure they are consistent across your Istio helm charts                                #
+  ##############################################################################################
+
+  caAddress: "{{ istio_all_global_caAddress }}"
+  istioNamespace: {{ istio_all_global_istioNamespace }}
+  jwtPolicy: {{ istio_all_global_jwtPolicy }}
+  meshID: "{{ istio_all_global_meshID }}"
+  mountMtlsCerts: {{ istio_all_global_mountMtlsCerts }}
+{% if istio_ingress_global_multiCluster is defined and istio_ingress_global_multiCluster|length %}
+  multiCluster:
+{{ istio_ingress_global_multiCluster|indent(4, True) }}
+{% endif %}
+  network: "{{ istio_all_global_network }}"
+  pilotCertProvider: {{ istio_all_global_pilotCertProvider }}
+{% if istio_all_global_sds is defined and istio_all_global_sds|length %}
+  sds:
+{{ istio_all_global_sds|indent(4, True) }}
+{% endif %}
+{% if istio_all_global_sts is defined and istio_all_global_sts|length %}
+  sts:
+{{ istio_all_global_sts|indent(4, True) }}
+{% endif %}
+  trustDomain: "{{ istio_all_global_trustDomain }}"
+
+meshConfig:
+  enablePrometheusMerge: {{ istio_gateways_ingressgateway_meshConfig_enablePrometheusMerge }}
+{% if istio_gateways_ingressgateway_meshConfig_defaultConfig is defined and istio_gateways_ingressgateway_meshConfig_defaultConfig|length %}
+  defaultConfig:
+{{ istio_gateways_ingressgateway_meshConfig_defaultConfig|indent(4, True) }}
+{% endif %}

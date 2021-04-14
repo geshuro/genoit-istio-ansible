@@ -1,0 +1,169 @@
+---
+- name: Check if the namespace exist
+  k8s_info:
+    api_version: v1
+    kind: Namespace
+    name: "{{ namespace }}"
+  register: namespace_exist
+
+- name: Verificar si existe secreto tls default
+  k8s_info:
+    api_version: v1
+    kind: Secret
+    name: "{{ nombre_secreto_tls }}"
+    namespace: "{{ namespace }}"
+  register: secreto_tls_exist
+  when:
+    - namespace_exist.resources[0].status.phase is defined
+
+- name: Crear o actualizar secreto {{ nombre_secreto_tls }} - {{ state }}
+  k8s:
+    state: "{{ state }}"
+    definition: "{{ lookup('template', 'secreto-tls.yaml.j2') }}"
+  when:
+    - namespace_exist.resources[0].status.phase is defined
+    - secreto_tls_exist.resources[0].metadata.creationTimestamp is not defined
+
+- name: Verificar si existe secreto tls default en {{ namespace }}
+  k8s_info:
+    api_version: v1
+    kind: Secret
+    name: "{{ nombre_secreto_tls }}"
+    namespace: "{{ namespace }}"
+  register: secreto_tls_re_exist
+  when:
+    - namespace_exist.resources[0].status.phase is defined
+
+- name: Check if the Helm Chart folder exist
+  stat:
+    path: "{{ helmchart_path }}"
+  register: helmchart_path_stat
+  when:
+    - namespace_exist.resources[0].status.phase is defined
+    - secreto_tls_re_exist.resources[0].metadata.creationTimestamp is defined
+
+- name: Ensure {{ output_path  }} exist
+  file:
+    path: "{{ output_path }}"
+    state: directory
+  when:
+    - namespace_exist.resources[0].status.phase is defined
+    - secreto_tls_re_exist.resources[0].metadata.creationTimestamp is defined
+    - helmchart_path_stat.stat.exists == true
+
+- name: Read {{ output_path  }} folder
+  find:
+    paths: "{{ output_path }}"
+    patterns: "*"
+  register: files_to_delete
+  when:
+    - namespace_exist.resources[0].status.phase is defined
+    - secreto_tls_re_exist.resources[0].metadata.creationTimestamp is defined
+    - helmchart_path_stat.stat.exists == true
+
+- name: Delete old files (if it exist)
+  file:
+    path: "{{ item.path }}"
+    state: absent
+  with_items: "{{ files_to_delete.files }}"
+  when:
+    - namespace_exist.resources[0].status.phase is defined
+    - secreto_tls_re_exist.resources[0].metadata.creationTimestamp is defined
+    - helmchart_path_stat.stat.exists == true
+
+- name: Create _yaml_ file to overwrite the Chart default values Istio Base
+  template:
+    src: ../templates/adjusted_values_base.yaml.j2
+    dest: "{{ output_path }}/adjusted_values_base.yaml"
+  when:
+    - namespace_exist.resources[0].status.phase is defined
+    - secreto_tls_re_exist.resources[0].metadata.creationTimestamp is defined
+    - helmchart_path_stat.stat.exists == true
+
+- name: Create _yaml_ file to overwrite the Chart default values Istio CNI
+  template:
+    src: ../templates/adjusted_values_cni.yaml.j2
+    dest: "{{ output_path }}/adjusted_values_cni.yaml"
+  when:
+    - namespace_exist.resources[0].status.phase is defined
+    - secreto_tls_re_exist.resources[0].metadata.creationTimestamp is defined
+    - helmchart_path_stat.stat.exists == true
+
+- name: Create _yaml_ file to overwrite the Chart default values Istio Discovery
+  template:
+    src: ../templates/adjusted_values_discovery.yaml.j2
+    dest: "{{ output_path }}/adjusted_values_discovery.yaml"
+  when:
+    - namespace_exist.resources[0].status.phase is defined
+    - secreto_tls_re_exist.resources[0].metadata.creationTimestamp is defined
+    - helmchart_path_stat.stat.exists == true
+
+- name: Create _yaml_ file to overwrite the Chart default values Istio Ingress
+  template:
+    src: ../templates/adjusted_values_ingress.yaml.j2
+    dest: "{{ output_path }}/adjusted_values_ingress.yaml"
+  when:
+    - namespace_exist.resources[0].status.phase is defined
+    - secreto_tls_re_exist.resources[0].metadata.creationTimestamp is defined
+    - helmchart_path_stat.stat.exists == true
+
+- name: Create _yaml_ file to overwrite the Chart default values Istio Egress
+  template:
+    src: ../templates/adjusted_values_egress.yaml.j2
+    dest: "{{ output_path }}/adjusted_values_egress.yaml"
+  when:
+    - namespace_exist.resources[0].status.phase is defined
+    - secreto_tls_re_exist.resources[0].metadata.creationTimestamp is defined
+    - helmchart_path_stat.stat.exists == true
+
+- name: Deploy the HelmChart Istio Base
+  shell: helm upgrade --install "{{ desired_deployment_name_base }}" -f "{{ output_path }}/adjusted_values_base.yaml" "{{ helmchart_istio_base_path }}/." --namespace "{{ namespace }}"
+  when:
+    - namespace_exist.resources[0].status.phase is defined
+    - secreto_tls_re_exist.resources[0].metadata.creationTimestamp is defined
+    - helmchart_path_stat.stat.exists == true
+
+- name: Deploy the HelmChart Istio CNI
+  shell: helm upgrade --install "{{ desired_deployment_name_cni }}" -f "{{ output_path }}/adjusted_values_cni.yaml" "{{ helmchart_istio_cni_path }}/." --namespace "{{ namespace }}"
+  when:
+    - namespace_exist.resources[0].status.phase is defined
+    - secreto_tls_re_exist.resources[0].metadata.creationTimestamp is defined
+    - helmchart_path_stat.stat.exists == true
+
+- name: Deploy the HelmChart Istio Discovery
+  shell: helm upgrade --install "{{ desired_deployment_name_discovery }}" -f "{{ output_path }}/adjusted_values_discovery.yaml" "{{ helmchart_istio_discovery_path }}/." --namespace "{{ namespace }}"
+  when:
+    - namespace_exist.resources[0].status.phase is defined
+    - secreto_tls_re_exist.resources[0].metadata.creationTimestamp is defined
+    - helmchart_path_stat.stat.exists == true
+
+- name: Deploy the HelmChart Istio Ingress
+  shell: helm upgrade --install "{{ desired_deployment_name_ingress }}" -f "{{ output_path }}/adjusted_values_ingress.yaml" "{{ helmchart_istio_ingress_path }}/." --namespace "{{ namespace }}"
+  when:
+    - namespace_exist.resources[0].status.phase is defined
+    - secreto_tls_re_exist.resources[0].metadata.creationTimestamp is defined
+    - helmchart_path_stat.stat.exists == true
+
+- name: Deploy the HelmChart Istio Egress
+  shell: helm upgrade --install "{{ desired_deployment_name_egress }}" -f "{{ output_path }}/adjusted_values_egress.yaml" "{{ helmchart_istio_egress_path }}/." --namespace "{{ namespace }}"
+  when:
+    - namespace_exist.resources[0].status.phase is defined
+    - secreto_tls_re_exist.resources[0].metadata.creationTimestamp is defined
+    - helmchart_path_stat.stat.exists == true
+
+- name: Delete {{ output_path }} as clean up task
+  file:
+    path: "{{ output_path }}"
+    state: absent
+  when:
+    - namespace_exist.resources[0].status.phase is defined
+    - helmchart_path_stat.stat.exists == true
+  notify: Istio was deployed
+
+- debug:
+    msg: The {{ namespace }} namespace does not exist
+  when: namespace_exist.resources[0].status.phase is not defined
+
+- debug:
+    msg: "The Helm Chart folder does not exists"
+  when: helmchart_path_stat.stat.exists == false

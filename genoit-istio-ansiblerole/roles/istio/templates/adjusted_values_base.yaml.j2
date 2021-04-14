@@ -1,0 +1,17 @@
+global:
+{% if istio_base_istiod_imagePullSecrets is defined and istio_base_istiod_imagePullSecrets|length %}
+  imagePullSecrets:
+{{ istio_base_istiod_imagePullSecrets|indent(4, True) }}
+{% endif %}
+  istioNamespace: {{ istio_base_namespace }}
+  istiod:
+    enableAnalysis: {{ istio_base_istiod_enableAnalysis }}
+
+  configValidation: {{ istio_base_configValidation }}
+  externalIstiod: {{ istio_base_externalIstiod }}
+  remotePilotAddress: "{{ istio_base_remotePilotAddress }}"
+
+base:
+  enableCRDTemplates: {{ istio_base_enableCRDTemplates }}
+  validationURL: "{{ istio_base_validationURL }}"
+  enableIstioConfigCRDs: {{ istio_base_enableIstioConfigCRDs }}

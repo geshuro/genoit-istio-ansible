@@ -1,0 +1,56 @@
+cni:
+{% if istio_cni_hub is defined %}
+  hub: "{{ istio_cni_hub }}"
+{% endif %}
+{% if istio_cni_tag is defined %}
+  tag: "{{ istio_cni_tag }}"
+{% endif %}
+{% if istio_cni_image is defined %}
+  image: {{ istio_cni_image }}
+{% endif %}
+{% if istio_cni_pullPolicy is defined %}
+  pullPolicy: "{{ istio_cni_pullPolicy }}"
+{% endif %}
+{% if istio_cni_logLevel is defined %}
+  logLevel: info
+{% endif %}
+{% if istio_cni_cniBinDir is defined %}
+  cniBinDir: {{ istio_cni_cniBinDir }}
+{% endif %}
+{% if istio_cni_cniConfDir is defined %}
+  cniConfDir: {{ istio_cni_cniConfDir }}
+{% endif %}
+{% if istio_cni_cniConfFileName is defined %}
+  cniConfFileName: "{{ istio_cni_cniConfFileName }}"
+{% endif %}
+{% if istio_cni_excludeNamespaces is defined and istio_cni_excludeNamespaces|length %}
+  excludeNamespaces:
+{{ istio_cni_excludeNamespaces|indent(4, True) }}
+{% endif %}
+{% if istio_cni_podAnnotations is defined and istio_cni_podAnnotations|length %}
+  podAnnotations:
+{{ istio_cni_podAnnotations|indent(4, True) }}
+{% endif %}
+{% if istio_cni_psp_cluster_role is defined %}
+  psp_cluster_role: {{ istio_cni_psp_cluster_role }}
+{% endif %}
+{% if istio_cni_chained is defined %}
+  chained: {{ istio_cni_chained }}
+{% endif %}
+{% if istio_cni_repair is defined and istio_cni_repair|length %}
+  repair:
+{{ istio_cni_repair|indent(4, True) }}
+{% endif %}
+  taint:
+    enabled: {{ istio_cni_taint_enabled }}
+revision: "{{ istio_cni_revision }}"
+ownerName: "{{ istio_cni_ownerName }}"
+
+global:
+  hub: {{ istio_cni_global_hub }}
+  tag: {{ istio_cni_global_tag }}
+  imagePullPolicy: "{{ istio_cni_global_imagePullPolicy }}"
+{% if istio_cni_global_imagePullSecrets is defined and istio_cni_global_imagePullSecrets|length %}
+  imagePullSecrets:
+{{ istio_cni_global_imagePullSecrets|indent(4, True) }}
+{% endif %}

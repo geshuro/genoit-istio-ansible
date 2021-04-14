@@ -1,0 +1,227 @@
+pilot:
+{% if istio_discovery_pilot_autoscaleEnabled is defined %}
+  autoscaleEnabled: {{ istio_discovery_pilot_autoscaleEnabled }}
+{% endif %}
+{% if istio_discovery_pilot_autoscaleMin is defined %}
+  autoscaleMin: {{ istio_discovery_pilot_autoscaleMin }}
+{% endif %}
+{% if istio_discovery_pilot_autoscaleMax is defined %}
+  autoscaleMax: {{ istio_discovery_pilot_autoscaleMax }}
+{% endif %}
+{% if istio_discovery_pilot_replicaCount is defined %}
+  replicaCount: {{ istio_discovery_pilot_replicaCount }}
+{% endif %}
+{% if istio_discovery_pilot_rollingMaxSurge is defined %}
+  rollingMaxSurge: {{ istio_discovery_pilot_rollingMaxSurge }}
+{% endif %}
+{% if istio_discovery_pilot_rollingMaxUnavailable is defined %}
+  rollingMaxUnavailable: {{ istio_discovery_pilot_rollingMaxUnavailable }}
+{% endif %}
+{% if istio_discovery_pilot_hub is defined %}
+  hub: "{{ istio_discovery_pilot_hub }}"
+{% endif %}
+{% if istio_discovery_pilot_tag is defined %}
+  tag: "{{ istio_discovery_pilot_tag }}"
+{% endif %}
+{% if istio_discovery_pilot_image is defined %}
+  image: {{ istio_discovery_pilot_image }}
+{% endif %}
+{% if istio_discovery_pilot_traceSampling is defined %}
+  traceSampling: {{ istio_discovery_pilot_traceSampling }}
+{% endif %}
+{% if istio_discovery_pilot_resources is defined and istio_discovery_pilot_resources|length %}
+  resources:
+{{ istio_discovery_pilot_resources|indent(4, True) }}
+{% endif %}
+{% if istio_discovery_pilot_env is defined and istio_discovery_pilot_env|length %}
+  env:
+{{ istio_discovery_pilot_env|indent(4, True) }}
+{% endif %}
+{% if istio_discovery_pilot_cpu is defined and istio_discovery_pilot_cpu|length %}
+  cpu:
+{{ istio_discovery_pilot_cpu|indent(4, True) }}
+{% endif %}
+{% if istio_discovery_pilot_enableProtocolSniffingForOutbound is defined %}
+  enableProtocolSniffingForOutbound: {{ istio_discovery_pilot_enableProtocolSniffingForOutbound }}
+{% endif %}
+{% if istio_discovery_pilot_enableProtocolSniffingForInbound is defined %}
+  enableProtocolSniffingForInbound: {{ istio_discovery_pilot_enableProtocolSniffingForInbound }}
+{% endif %}
+{% if istio_discovery_pilot_nodeSelector is defined and istio_discovery_pilot_nodeSelector|length %}
+  nodeSelector:
+{{ istio_discovery_pilot_nodeSelector|indent(4, True) }}
+{% endif %}
+{% if istio_discovery_pilot_podAnnotations is defined and istio_discovery_pilot_podAnnotations|length %}
+  podAnnotations:
+{{ istio_discovery_pilot_podAnnotations|indent(4, True) }}
+{% endif %}
+{% if istio_discovery_pilot_jwksResolverExtraRootCA is defined %}
+  jwksResolverExtraRootCA: "{{ istio_discovery_pilot_jwksResolverExtraRootCA }}"
+{% endif %}
+{% if istio_discovery_pilot_configSource is defined and istio_discovery_pilot_configSource|length %}
+  configSource:
+{{ istio_discovery_pilot_configSource|indent(4, True) }}
+{% endif %}
+{% if istio_discovery_pilot_plugins is defined and istio_discovery_pilot_plugins|length %}
+  plugins:
+{{ istio_discovery_pilot_plugins|indent(4, True) }}
+{% endif %}
+{% if istio_discovery_pilot_keepaliveMaxServerConnectionAge is defined %}
+  keepaliveMaxServerConnectionAge: {{ istio_discovery_pilot_keepaliveMaxServerConnectionAge }}
+{% endif %}
+{% if istio_discovery_pilot_deploymentLabels is defined and istio_discovery_pilot_deploymentLabels|length %}
+  deploymentLabels:
+{{ istio_discovery_pilot_deploymentLabels|indent(4, True) }}
+{% endif %}
+{% if istio_discovery_pilot_configMap is defined %}
+  configMap: {{ istio_discovery_pilot_configMap }}
+{% endif %}
+
+
+sidecarInjectorWebhook:
+{% if istio_discovery_sidecarInjectorWebhook_useLegacySelectors is defined %}
+  useLegacySelectors: {{ istio_discovery_sidecarInjectorWebhook_useLegacySelectors }}
+{% endif %}
+{% if istio_discovery_sidecarInjectorWebhook_neverInjectSelector is defined and istio_discovery_sidecarInjectorWebhook_neverInjectSelector|length %}
+  neverInjectSelector:
+{{ istio_discovery_sidecarInjectorWebhook_neverInjectSelector|indent(4, True) }}
+{% endif %}
+{% if istio_discovery_sidecarInjectorWebhook_alwaysInjectSelector is defined and istio_discovery_sidecarInjectorWebhook_alwaysInjectSelector|length %}
+  alwaysInjectSelector:
+{{ istio_discovery_sidecarInjectorWebhook_alwaysInjectSelector|indent(4, True) }}
+{% endif %}
+{% if istio_discovery_sidecarInjectorWebhook_injectedAnnotations is defined and istio_discovery_sidecarInjectorWebhook_injectedAnnotations|length %}
+  injectedAnnotations:
+{{ istio_discovery_sidecarInjectorWebhook_injectedAnnotations|indent(4, True) }}
+{% endif %}
+{% if istio_discovery_sidecarInjectorWebhook_enableNamespacesByDefault is defined %}
+  enableNamespacesByDefault: {{ istio_discovery_sidecarInjectorWebhook_enableNamespacesByDefault }}
+{% endif %}
+{% if istio_discovery_sidecarInjectorWebhook_objectSelector is defined and istio_discovery_sidecarInjectorWebhook_objectSelector|length %}
+  objectSelector:
+{{ istio_discovery_sidecarInjectorWebhook_objectSelector|indent(4, True) }}
+{% endif %}
+{% if istio_discovery_sidecarInjectorWebhook_enableNamespacesByDefault is defined %}
+  rewriteAppHTTPProbe: {{ istio_discovery_sidecarInjectorWebhook_rewriteAppHTTPProbe }}
+{% endif %}
+{% if istio_discovery_sidecarInjectorWebhook_templates is defined and istio_discovery_sidecarInjectorWebhook_templates|length %}
+  templates:
+{{ istio_discovery_sidecarInjectorWebhook_templates|indent(4, True) }}
+{% endif %}
+{% if istio_discovery_sidecarInjectorWebhook_defaultTemplates is defined and istio_discovery_sidecarInjectorWebhook_defaultTemplates|length %}
+  defaultTemplates:
+{{ istio_discovery_sidecarInjectorWebhook_defaultTemplates|indent(4, True) }}
+{% endif %}
+
+istiodRemote:
+{% if istio_discovery_sidecarInjectorWebhook_enableNamespacesByDefault is defined %}
+  injectionURL: "{{ istio_discovery_istiodRemote_injectionURL }}"
+{% endif %}
+telemetry:
+  enabled: {{ istio_discovery_telemetry_enabled }}
+  v2:
+    enabled: {{ istio_discovery_telemetry_v2_enabled }}
+{% if istio_discovery_telemetry_v2_metadataExchange is defined and istio_discovery_telemetry_v2_metadataExchange|length %}
+    metadataExchange:
+{{ istio_discovery_telemetry_v2_metadataExchange|indent(6, True) }}
+{% endif %}
+{% if istio_discovery_telemetry_v2_prometheus is defined and istio_discovery_telemetry_v2_prometheus|length %}
+    prometheus:
+{{ istio_discovery_telemetry_v2_prometheus|indent(6, True) }}
+{% endif %}
+{% if istio_discovery_telemetry_v2_stackdriver is defined and istio_discovery_telemetry_v2_stackdriver|length %}
+    stackdriver:
+{{ istio_discovery_telemetry_v2_stackdriver|indent(6, True) }}
+{% endif %}
+{% if istio_discovery_telemetry_v2_accessLogPolicy is defined and istio_discovery_telemetry_v2_accessLogPolicy|length %}
+    accessLogPolicy:
+{{ istio_discovery_telemetry_v2_accessLogPolicy|indent(6, True) }}
+{% endif %}
+
+revision: "{{ istio_discovery_revision }}"
+ownerName: "{{ istio_discovery_ownerName }}"
+
+meshConfig:
+{% if istio_discovery_meshConfig_enablePrometheusMerge is defined %}
+  enablePrometheusMerge: {{ istio_discovery_meshConfig_enablePrometheusMerge }}
+{% endif %}
+{% if istio_discovery_meshConfig_rootNamespace is defined %}
+  rootNamespace: {{ istio_discovery_meshConfig_rootNamespace }}
+{% endif %}
+global:
+{% if istio_discovery_global_defaultPodDisruptionBudget is defined and istio_discovery_global_defaultPodDisruptionBudget|length %}
+  defaultPodDisruptionBudget:
+{{ istio_discovery_global_defaultPodDisruptionBudget|indent(4, True) }}
+{% endif %}
+{% if istio_discovery_global_defaultResources is defined and istio_discovery_global_defaultResources|length %}
+  defaultResources:
+{{ istio_discovery_global_defaultResources|indent(4, True) }}
+{% endif %}
+  hub: {{ istio_discovery_global_hub }}
+  tag: {{ istio_discovery_global_tag }}
+  imagePullPolicy: "{{ istio_discovery_global_imagePullPolicy }}"
+{% if istio_discovery_global_imagePullSecrets is defined and istio_discovery_global_imagePullSecrets|length %}
+  imagePullSecrets:
+{{ istio_discovery_global_imagePullSecrets|indent(4, True) }}
+{% endif %}
+{% if istio_discovery_global_istiod is defined and istio_discovery_global_istiod|length %}
+  istiod:
+{{ istio_discovery_global_istiod|indent(4, True) }}
+{% endif %}
+  logAsJson: {{ istio_discovery_global_logAsJson }}
+{% if istio_discovery_global_logging is defined and istio_discovery_global_logging|length %}
+  logging:
+{{ istio_discovery_global_logging|indent(4, True) }}
+{% endif %}
+  omitSidecarInjectorConfigMap: {{ istio_discovery_global_omitSidecarInjectorConfigMap }}
+  oneNamespace: {{ istio_discovery_global_oneNamespace }}
+  operatorManageWebhooks: {{ istio_discovery_global_operatorManageWebhooks }}
+  priorityClassName: "{{ istio_discovery_global_priorityClassName }}"
+{% if istio_discovery_global_proxy is defined and istio_discovery_global_proxy|length %}
+  proxy:
+{{ istio_discovery_global_logging|indent(4, True) }}
+{% endif %}
+{% if istio_discovery_global_proxy_init is defined and istio_discovery_global_proxy_init|length %}
+  proxy_init:
+{{ istio_discovery_global_proxy_init|indent(4, True) }}
+{% endif %}
+  remotePilotAddress: "{{ istio_discovery_global_remotePilotAddress }}"
+  ##############################################################################################
+  # The following values are found in other charts. To effectively modify these values, make   #
+  # make sure they are consistent across your Istio helm charts                                #
+  ##############################################################################################
+  caAddress: "{{ istio_all_global_caAddress }}"
+  istioNamespace: {{ istio_all_global_istioNamespace }}
+  externalIstiod: {{ istio_all_global_externalIstiod }}
+  jwtPolicy: {{ istio_all_global_jwtPolicy }}
+  meshID: "{{ istio_all_global_meshID }}"
+{% if istio_all_global_meshNetworks is defined and istio_all_global_meshNetworks|length %}
+  meshNetworks:
+{{ istio_all_global_meshNetworks|indent(4, True) }}
+{% endif %}
+  mountMtlsCerts: {{ istio_all_global_mountMtlsCerts }}
+{% if istio_all_global_multiCluster is defined and istio_all_global_multiCluster|length %}
+  multiCluster:
+{{ istio_all_global_multiCluster|indent(4, True) }}
+{% endif %}
+  network: "{{ istio_all_global_network }}"
+  pilotCertProvider: {{ istio_all_global_pilotCertProvider }}
+{% if istio_all_global_sds is defined and istio_all_global_sds|length %}
+  sds:
+{{ istio_all_global_sds|indent(4, True) }}
+{% endif %}
+{% if istio_all_global_sts is defined and istio_all_global_sts|length %}
+  sts:
+{{ istio_all_global_sts|indent(4, True) }}
+{% endif %}
+{% if istio_all_global_tracer is defined and istio_all_global_tracer|length %}
+  tracer:
+{{ istio_all_global_tracer|indent(4, True) }}
+{% endif %}
+  useMCP: {{ istio_all_global_useMCP }}
+  trustDomain: "{{ istio_all_global_trustDomain }}"
+base:
+  enableIstioConfigCRDs: {{ istio_discovery_base_enableIstioConfigCRDs }}
+
+istio_cni:
+  enabled: {{ istio_cni_enabled }}
